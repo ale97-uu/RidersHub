@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.sql.SQLException;
+
 public class AmministratoreDAOTest {
 
     @Test
@@ -38,6 +40,18 @@ public class AmministratoreDAOTest {
         amministratore.setCodice("444");
         Mockito.when(amministratoreDAO.doRetrieveByUsername("admin")).thenReturn(amministratore);//verifichiamo errore perchè l'username non è corretto
         Assertions.assertEquals(amministratore,amministratoreDAO.doRetrieveByUsername("admin"));
+    }
+    @Test
+    void doRetrieveByUsernameFail(){
+        Amministratore  amministratore= new Amministratore();
+        amministratore.setUsername("pippo");
+        amministratore.setEmail("admin123@gmail.com");
+        amministratore.setPassword("admin");
+        amministratore.setNome("Alfredo");
+        amministratore.setCognome("Russo");
+        amministratore.setCodice("444");//verifichiamo errore perchè l'username non è corretto
+        Assertions.assertThrows(RuntimeException.class,
+                ()-> new AmministratoreDAO().doRetrieveByUsername(amministratore.getUsername()));
     }
 }
 

@@ -24,8 +24,12 @@ public class AmministratoreDAO {
                 p.setCodice(rs.getString(6));
                 return p;
             }
-            return null;
+            else{
+                throw new UtenteNonTrovatoException();
+            }
         }catch(SQLException e){
+            throw new RuntimeException(e);
+        } catch (UtenteNonTrovatoException e) {
             throw new RuntimeException(e);
         }
     }
