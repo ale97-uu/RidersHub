@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Prodotto {
@@ -9,6 +11,16 @@ public class Prodotto {
     private float prezzo;
     private String marca;
     private String categoria;
+    private String fotoCopertina;
+    private List<String> listaFoto = new ArrayList<>();
+
+    public String getFotoCopertina() {
+        return fotoCopertina;
+    }
+
+    public void setFotoCopertina(String fotoCopertina) {
+        this.fotoCopertina = fotoCopertina;
+    }
 
     @Override
     public String toString() {
@@ -84,5 +96,6 @@ public class Prodotto {
     public void setMarca(String marca) {
         this.marca= marca;
     }
+    public List<String> getListaFoto() { return listaFoto;}
 }
 

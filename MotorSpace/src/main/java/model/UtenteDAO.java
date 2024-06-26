@@ -9,17 +9,18 @@ public class UtenteDAO {
 
     public Utente doRetrieveByUsername(String username) {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT username, email, password, nome, cognome FROM cliente WHERE username =?");
+            PreparedStatement ps = con.prepareStatement("SELECT username, email, password, nome, cognome, moto FROM cliente WHERE username =?");
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Utente p = new Utente();
-                p.setUsername(rs.getString(1));
-                p.setEmail(rs.getString(2));
-                p.setPassword(rs.getString(3));
-                p.setNome(rs.getString(4));
-                p.setCognome(rs.getString(5));
-                return p;
+                Utente utente = new Utente();
+                utente.setUsername(rs.getString(1));
+                utente.setEmail(rs.getString(2));
+                utente.setPassword(rs.getString(3));
+                utente.setNome(rs.getString(4));
+                utente.setCognome(rs.getString(5));
+                utente.setMoto(rs.getString(6));
+                return utente;
             }
             return null;
         } catch (SQLException e) {
@@ -30,12 +31,13 @@ public class UtenteDAO {
     public void doSave(Utente utente) {
         try (Connection c = ConPool.getConnection()) {
 
-            PreparedStatement ps = c.prepareStatement("insert into cliente(username, email, password, nome, cognome) values(?, ?, ?, ?, ?)");
+            PreparedStatement ps = c.prepareStatement("insert into cliente(username, email, password, nome, cognome, moto) values(?, ?, ?, ?, ?, ?)");
             ps.setString(1, utente.getUsername());
             ps.setString(2, utente.getEmail());
             ps.setString(3, utente.getPassword());
             ps.setString(4, utente.getNome());
             ps.setString(5, utente.getCognome());
+            ps.setString(6, utente.getMoto());
             if (ps.executeUpdate() != 1) {
                 throw new RuntimeException("INSERT error");
             }
@@ -47,7 +49,7 @@ public class UtenteDAO {
 
     public List<Utente> doRetrieveAll(int offset, int limit) {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT username, email, password, nome FROM cliente LIMIT ?,?  ");
+            PreparedStatement ps = con.prepareStatement("SELECT username, email, password, nome, cognome, moto FROM cliente LIMIT ?,?  ");
             ps.setInt(1, offset);
             ps.setInt(2, limit);
             List<Utente> utenti = new ArrayList<>();
@@ -59,6 +61,7 @@ public class UtenteDAO {
                 u.setPassword(rs.getString(3));
                 u.setNome(rs.getString(4));
                 u.setCognome(rs.getString(5));
+                u.setMoto(rs.getString(6));
                 utenti.add(u);
             }
             return utenti;
@@ -71,18 +74,19 @@ public class UtenteDAO {
     public Utente doRetrieveByUsernamePassword(String username, String password) {
         try (Connection con = ConPool.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT username, email, password, nome, cognome FROM cliente WHERE username=? AND password = ?");
+                    "SELECT username, email, password, nome, cognome, moto FROM cliente WHERE username=? AND password = ?");
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Utente p = new Utente();
-                p.setUsername(rs.getString(1));
-                p.setEmail(rs.getString(2));
-                p.setPassword(rs.getString(3));
-                p.setNome(rs.getString(4));
-                p.setCognome(rs.getString(5));
-                return p;
+                Utente utente = new Utente();
+                utente.setUsername(rs.getString(1));
+                utente.setEmail(rs.getString(2));
+                utente.setPassword(rs.getString(3));
+                utente.setNome(rs.getString(4));
+                utente.setCognome(rs.getString(5));
+                utente.setMoto(rs.getString(6));
+                return utente;
             }
             return null;
         } catch (SQLException e) {

@@ -44,6 +44,7 @@ public class RegistrazioneServlet extends HttpServlet {
         if (!(cognome != null && cognome.trim().length() > 0 && cognome.matches("([ a-zA-Z]{0,30})"))) {
             throw new MyServletException("Nome non valido.");
         }
+        String moto = request.getParameter("moto");
         String email = request.getParameter("email");
         if (!(email != null && email.matches("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w+)"))) {
             throw new MyServletException("Email non valida.");
@@ -53,6 +54,7 @@ public class RegistrazioneServlet extends HttpServlet {
             utente.setUsername(username);
             utente.setNome(nome);
             utente.setCognome(cognome);
+            utente.setMoto(moto);
             utente.setPassword(password);
             utente.setEmail(email);
             System.out.println(utente.getNome());

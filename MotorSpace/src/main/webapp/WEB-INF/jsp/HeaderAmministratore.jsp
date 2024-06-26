@@ -35,6 +35,11 @@
                 <a href="LoginAmministratoreServlet?id=home"><img src="img/logo_small_1.png"></a>
             </div>
             <!-- Caricamento delle varie categorie di prodotti all'interno dell'header della home-->
+            <li><form action="RicercaServlet" method="get" >
+                <input type="text" name="q" ricerca="ricerca-datalist" placeholder="Ricerca" onkeyup="ricerca(this.value)" value="<c:out value ="${param.q}"/>">
+                <datalist id="ricerca-datalist"></datalist>
+            </form>
+            </li>
             <li>
                 <a>Vestiario</a>
                 <menu>
@@ -47,7 +52,7 @@
                 </menu>
             </li>
             <li>
-                <a>Parti Di Ricambio</a>
+                <a>Ricambi</a>
                 <menu>
                     <c:forEach items="${categorie2}" var="categorie2">
                         <menuitem>
@@ -81,9 +86,10 @@
                         <menu>
                             <menuitem>
                                 <card>
-                                    <form action="LoginServlet" method="post">
-                                        <input type="text" name="username" value="Spaghettino"><br>
+                                    <form action="LoginAmministratoreServlet" method="post">
+                                        <input type="text" name="username" value="Aamministratoredmin"><br>
                                         <input type="password" name="password" value="Ciaone55"><br>
+                                        <input type="password" name="codice" value="453"><br>
                                         <input type="submit" value="Login">
                                     </form>
                                 </card>
@@ -115,11 +121,7 @@
 
             </li>
             <li><a href="Carrello"><img src="img/carrello_rosso.png"></a></li>
-            <li><form action="RicercaServlet" method="get" >
-                <input type="text" name="q" ricerca="ricerca-datalist" placeholder="Ricerca" onkeyup="ricerca(this.value)" value="<c:out value ="${param.q}"/>">
-                <datalist id="ricerca-datalist"></datalist>
-            </form>
-            </li>
+
         </ul>
     </label>
 </nav>

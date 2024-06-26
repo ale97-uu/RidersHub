@@ -21,12 +21,19 @@
 <body>
 <nav><!-- use fx attribute for fixed positioning -->
     <label>
-        <ul>
+
             <div class="logo">
                 <a href="Home"><img src="img/logo.png"></a>
             </div>
+        <ul>
         <!-- Caricamento delle varie categorie di prodotti all'interno dell'header della home-->
-           <li>
+            <li>
+                <form action="RicercaServlet" method="get" >
+                    <input type="text" name="q" ricerca="ricerca-datalist" placeholder="Ricerca" onkeyup="ricerca(this.value)" value="<c:out value ="${param.q}"/>">
+                    <datalist id="ricerca-datalist"></datalist>
+                </form>
+            </li>
+           <li class="lista">
                <a>Vestiario</a>
                 <menu>
                     <c:forEach items="${categorie1}" var="categorie1">
@@ -38,7 +45,7 @@
                 </menu>
            </li>
             <li>
-                <a>Parti Di Ricambio</a>
+                <a>Ricambi</a>
                 <menu>
                     <c:forEach items="${categorie2}" var="categorie2">
                         <menuitem>
@@ -90,7 +97,7 @@
                         <!-- In caso l'utente sia loggato avrà la possibilità di controllare il proprio profilo o la pagina dei propri ordini -->
                         <a> <img src="img/logoLogin_2_2.png"> </a>
                         <menu>
-                            <menuitem><a href="profilo.jsp">Profilo</a> </menuitem>
+                            <menuitem><a href="profiloServlet">Profilo</a> </menuitem>
                             <menuitem><a href="VisualizzaOrdini">I miei ordini</a> </menuitem>
                             <menuitem>
                                 <card>
@@ -105,11 +112,7 @@
 
             </li>
             <li><a href="Carrello"><img src="img/carrello_rosso.png"></a></li>
-            <li><form action="RicercaServlet" method="get" >
-                <input type="text" name="q" ricerca="ricerca-datalist" placeholder="Ricerca" onkeyup="ricerca(this.value)" value="<c:out value ="${param.q}"/>">
-                <datalist id="ricerca-datalist"></datalist>
-            </form>
-            </li>
+
         </ul>
     </label>
 </nav>

@@ -21,7 +21,7 @@ public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        Utente utente=null;
+        Utente utente = null;
         if(username != null && password != null){
             utente = utenteDAO.doRetrieveByUsernamePassword(username,password);
         }

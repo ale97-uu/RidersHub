@@ -5,7 +5,6 @@
     <jsp:param name="pageTitle" value="Registrazione utente"/>
 </jsp:include>
 
-<body>
 <section>
 <hr>
 <form>
@@ -20,5 +19,3 @@
     <button onclick="window.location.href='ModificaDati.jsp'" type="button" class="btn btn-warning">Modifica dati</button>
 <%@ include file="../footer.html" %>
 </section>
-</body>
-</html>

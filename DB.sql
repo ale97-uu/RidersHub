@@ -26,6 +26,7 @@ CREATE TABLE cliente
     password      varchar(30) NOT NULL,
     nome          varchar(30) NOT NULL,
     cognome       varchar(30) NOT NULL,
+    moto 		  varchar(30),
     PRIMARY KEY (id,username),
     UNIQUE KEY email_UNIQUE (email),
     UNIQUE KEY username_UNIQUE (username)
@@ -50,9 +51,27 @@ CREATE TABLE prodotto
     marca       varchar(30) NOT NULL,
     prezzo      float       NOT NULL,
     categoria   int DEFAULT NULL,
+    foto_copertina varchar(800) NOT NULL,
     PRIMARY KEY (id),
 
     CONSTRAINT categoria FOREIGN KEY (categoria) REFERENCES categoria (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+ALTER TABLE prodotto ADD FULLTEXT(nome);
+ALTER TABLE prodotto ADD FULLTEXT(descrizione);
+
+CREATE TABLE foto_prodotto
+(
+    /*necessaria*/
+    id int	AUTO_INCREMENT NOT NULL,
+    link1        varchar(800) NOT NULL,
+    link2        varchar(800) NOT NULL,
+    link3        varchar(800) NOT NULL,
+    link4        varchar(800) NOT NULL,
+    id_prodotto   int DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_prodotto) REFERENCES Prodotto(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -169,16 +188,29 @@ VALUES('Parti motore e Filtri','Esplora la nostra selezione di parti motore e fi
 
 /*Insert prodotto
 INSERT INTO prodotto VALUES ('nome', 'descrizione', 'codice', 'marca', 'prezzo', 'categoria'); */
-INSERT INTO prodotto(nome, descrizione, marca, prezzo, categoria)
-VALUES ('Casco modulare Dubai 504A', 'Perfetto per il viaggio.', 'Duabi', 89.99, 1);
-INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria)
-VALUES ('Casco integrale RoadRunner', 'Casco integrale, leggero e pratico.', 'Befast', 69.00, 1);
-INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria)
-VALUES ('Casco integrale Spartan', 'Casco integrale in fibra, leggero e comodo.', 'Shark', 365.00, 1);
-INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria)
-VALUES ('Casco FF323 ARROW C RACING', 'Casco integrale in carbonio leggero.', 'L32', 367.90, 1);
-INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria)
-VALUES ('Giacca moto Albert Avio', 'Giacca da uomo leggera, antivento e traspirante. ', 'Tucano', '69.00','2');
+INSERT INTO prodotto(nome, descrizione, marca, prezzo, categoria, foto_copertina)
+VALUES ('Casco modulare Dubai 504A', 'Perfetto per il viaggio.', 'Duabi', 89.99, 1,'https://i.imgur.com/8D1EdWe.jpg');
+INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria, foto_copertina)
+VALUES ('Casco integrale RoadRunner', 'Casco integrale, leggero e pratico.', 'Befast', 69.00, 1, 'https://i.imgur.com/8D1EdWe.jpg');
+INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria, foto_copertina)
+VALUES ('Casco integrale Spartan', 'Casco integrale in fibra, leggero e comodo.', 'Shark', 365.00, 1, 'https://i.imgur.com/8D1EdWe.jpg');
+INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria, foto_copertina)
+VALUES ('Casco FF323 ARROW C RACING', 'Casco integrale in carbonio leggero.', 'L32', 367.90, 1, 'https://i.imgur.com/8D1EdWe.jpg');
+INSERT INTO prodotto (nome, descrizione, marca, prezzo, categoria, foto_copertina)
+VALUES ('Giacca moto Albert Avio', 'Giacca da uomo leggera, antivento e traspirante. ', 'Tucano', '69.00', 2, 'https://i.imgur.com/8D1EdWe.jpg');
 
-insert into cliente( username, email, password, nome, cognome )
-values ('Spaghettino', 'dkoo@sddfs.it', 'Ciaone55', 'Rodolfo', 'Signorini');
+insert into cliente( username, email, password, nome, cognome, moto )
+values ('Spaghettino', 'dkoo@sddfs.it', 'Ciaone55', 'Rodolfo', 'Signorini', 'rsv4');
+
+insert into amministratore(username, email, password, nome, cognome, codicediaccesso)
+values ('Aamministratoredmin','admin123@gmail.com', 'Ciaone55', 'Mimmo', 'Gomma', 453);
+
+INSERT INTO foto_prodotto(link1, link2, link3, link4,id_prodotto)
+VALUES ('https://i.imgur.com/8D1EdWe.jpg', 'https://i.imgur.com/8D1EdWe.jpg', 'https://i.imgur.com/8D1EdWe.jpg', 'https://i.imgur.com/8D1EdWe.jpg', 1);
+
+
+
+
+
+
+

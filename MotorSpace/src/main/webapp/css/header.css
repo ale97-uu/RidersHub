@@ -2,3 +2,10 @@
     width: 100%;
     background-color: #abb5ba;
 }
+.lista{
+    position: fixed;
+    left: 100px;
+}
+nav{
+    margin-left: 0px;
+}

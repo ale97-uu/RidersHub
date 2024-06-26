@@ -10,17 +10,19 @@ public class Utente {
     private String password;
     private String nome;
     private String cognome;
+    String moto;
 
     public Utente(){
 
     }
 
-    public Utente(String username, String email, String password, String nome, String cognome) {
+    public Utente(String username, String email, String password, String nome, String cognome, String moto) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
+        this.moto = moto;
     }
 
 
@@ -76,6 +78,13 @@ public class Utente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+    public String getMoto() {
+        return moto;
+    }
+
+    public void setMoto(String moto) {
+        this.moto = moto;
     }
 
 

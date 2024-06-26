@@ -17,6 +17,8 @@
         <input type="text" name="nome" >
         <label>Cognome(solo lettere)</label>
         <input type="text" name="cognome" >
+        <label>Moto</label>
+        <input type="text" name="moto" >
         <label> Email</label>
         <input type="email" name="email" >
         <input id="registrami" type="submit" value="Registrami"><span id="registramimessaggio"></span>

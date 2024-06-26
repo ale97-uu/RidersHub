@@ -16,20 +16,22 @@ public class ProdottoDAO {
     }
     public List<Prodotto>doRetrieveAll(int offset,int limit) {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT prodotto.id,prodotto.nome,prodotto.descrizione,prodotto.marca,prodotto.prezzo FROM prodotto limit ?,?");
+            PreparedStatement ps = con.prepareStatement("SELECT prodotto.id, prodotto.nome, prodotto.descrizione, prodotto.marca, prodotto.prezzo, prodotto.foto_copertina FROM prodotto limit ?,?");
             ps.setInt(1, offset);
             ps.setInt(2, limit);
             ResultSet rs = ps.executeQuery();
 
             ArrayList<Prodotto> prodotti = new ArrayList<>();
             while (rs.next()) {
-                Prodotto P = new Prodotto();
-                P.setId(rs.getInt(1));
-                P.setNome(rs.getString(2));
-                P.setDescrizione(rs.getString(3));
-                P.setMarca((rs.getString(4)));
-                P.setPrezzo(rs.getFloat(5));
-                prodotti.add(P);
+                Prodotto p = new Prodotto();
+                p.setId(rs.getInt(1));
+                p.setNome(rs.getString(2));
+                p.setDescrizione(rs.getString(3));
+                p.setMarca((rs.getString(4)));
+                p.setPrezzo(rs.getFloat(5));
+                p.setFotoCopertina((rs.getString(6)));
+
+                prodotti.add(p);
             }
             return prodotti;
         } catch (SQLException e) {
@@ -37,40 +39,51 @@ public class ProdottoDAO {
         }
     }
     public Prodotto doRetrieveById(int id){
-        try(Connection con =ConPool.getConnection()){
-            PreparedStatement ps=con.prepareStatement("SELECT prodotto.id,prodotto.nome,prodotto.descrizione,prodotto.marca,prodotto.prezzo FROM prodotto WHERE id=?");
+        try(Connection con = ConPool.getConnection()){
+            PreparedStatement ps=con.prepareStatement("SELECT prodotto.id, prodotto.nome, prodotto.descrizione, prodotto.marca, prodotto.prezzo, prodotto.foto_copertina FROM prodotto WHERE id=?");
             ps.setInt(1,id);
             ResultSet rs=ps.executeQuery();
+            Prodotto p=new Prodotto();
             if(rs.next()){
-                Prodotto P=new Prodotto();
-                P.setId(rs.getInt(1));
-                P.setNome(rs.getString(2));
-                P.setDescrizione(rs.getString(3));
-                P.setMarca((rs.getString(4)));
-                P.setPrezzo(rs.getFloat(5));
-                return P;
+                p.setId(rs.getInt(1));
+                p.setNome(rs.getString(2));
+                p.setDescrizione(rs.getString(3));
+                p.setMarca((rs.getString(4)));
+                p.setPrezzo(rs.getFloat(5));
+                p.setFotoCopertina(rs.getString(6));
             }
-            return null;
+            ps=con.prepareStatement("SELECT foto_prodotto.link1, foto_prodotto.link2, foto_prodotto.link3, foto_prodotto.link4 FROM foto_prodotto WHERE id_prodotto=?");
+            ps.setInt(1,id);
+            rs=ps.executeQuery();
+            if(rs.next()) {
+                p.getListaFoto().add(rs.getString(1));
+                p.getListaFoto().add(rs.getString(2));
+                p.getListaFoto().add(rs.getString(3));
+                p.getListaFoto().add(rs.getString(4));
+
+            }
+            return p;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     public List<Prodotto> doRetrieveByNome(String against,int offset,int limit) {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT prodotto.id,prodotto.nome,prodotto.descrizione,prodotto.marca,prodotto.prezzo FROM prodotto WHERE MATCH (nome)AGAINST (? IN BOOLEAN MODE) LIMIT ?,?");
+            PreparedStatement ps = con.prepareStatement("SELECT prodotto.id, prodotto.nome, prodotto.descrizione, prodotto.marca, prodotto.prezzo, prodotto.categoria, prodotto.foto_copertina FROM prodotto WHERE MATCH (nome) AGAINST (? IN BOOLEAN MODE) LIMIT ?,?");
             ps.setString(1, against);
             ps.setInt(2, offset);
             ps.setInt(3, limit);
             ArrayList<Prodotto> prodotti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Prodotto P=new Prodotto();
-                P.setId(rs.getInt(1));
-                P.setNome(rs.getString(2));
-                P.setDescrizione(rs.getString(3));
-                P.setMarca((rs.getString(4)));
-                P.setPrezzo(rs.getFloat(5));
-                prodotti.add(P);
+                Prodotto p=new Prodotto();
+                p.setId(rs.getInt(1));
+                p.setNome(rs.getString(2));
+                p.setDescrizione(rs.getString(3));
+                p.setMarca((rs.getString(4)));
+                p.setPrezzo(rs.getFloat(5));
+                p.setFotoCopertina(rs.getString(6));
+                prodotti.add(p);
             }
             return prodotti;
         } catch (SQLException e) {
@@ -99,13 +112,14 @@ public class ProdottoDAO {
             ArrayList<Prodotto> prodotti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Prodotto P=new Prodotto();
-                P.setId(rs.getInt(1));
-                P.setNome(rs.getString(2));
-                P.setDescrizione(rs.getString(3));
-                P.setMarca((rs.getString(4)));
-                P.setPrezzo(rs.getFloat(5));
-                prodotti.add(P);
+                Prodotto p=new Prodotto();
+                p.setId(rs.getInt(1));
+                p.setNome(rs.getString(2));
+                p.setDescrizione(rs.getString(3));
+                p.setMarca((rs.getString(4)));
+                p.setPrezzo(rs.getFloat(5));
+                p.setFotoCopertina(rs.getString(6));
+                prodotti.add(p);
             }
             return prodotti;
         } catch (SQLException e) {
@@ -114,20 +128,20 @@ public class ProdottoDAO {
     }
     public List<Prodotto> doRetrieveByCategoria(int categoria, OrderBy orderBy, int offset, int limit) {
         try (Connection con = ConPool.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT prodotto.id,prodotto.nome,prodotto.descrizione,prodotto.marca,prodotto.prezzo FROM prodotto, categoria WHERE prodotto.categoria=categoria.id AND categoria.id=? "+orderBy.sql+" LIMIT ?,?");
+            PreparedStatement ps = con.prepareStatement("SELECT prodotto.id, prodotto.nome, prodotto.descrizione, prodotto.marca, prodotto.prezzo FROM prodotto, categoria WHERE prodotto.categoria=categoria.id AND categoria.id=? "+orderBy.sql+" LIMIT ?,?");
             ps.setInt(1, categoria);
             ps.setInt(2, offset);
             ps.setInt(3, limit);
             ArrayList<Prodotto> prodotti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Prodotto P = new Prodotto();
-                P.setId(rs.getInt(1));
-                P.setNome(rs.getString(2));
-                P.setDescrizione(rs.getString(3));
-                P.setMarca((rs.getString(4)));
-                P.setPrezzo(rs.getFloat(5));
-                prodotti.add(P);
+                Prodotto p = new Prodotto();
+                p.setId(rs.getInt(1));
+                p.setNome(rs.getString(2));
+                p.setDescrizione(rs.getString(3));
+                p.setMarca((rs.getString(4)));
+                p.setPrezzo(rs.getFloat(5));
+                prodotti.add(p);
             }
             return prodotti;
         } catch (SQLException e) {
@@ -138,12 +152,25 @@ public class ProdottoDAO {
 
     public void doSave(Prodotto prodotto, int idCategoria){
         try(Connection con = ConPool.getConnection()){
-            PreparedStatement ps = con.prepareStatement("INSERT  INTO prodotto(nome, descrizione, marca, prezzo, categoria) VALUES(?,?,?,?,?)");
+            PreparedStatement ps = con.prepareStatement("INSERT  INTO prodotto(nome, descrizione, marca, prezzo, categoria, categoria) VALUES(?,?,?,?,?,?)");
             ps.setString(1,prodotto.getNome());
             ps.setString(2,prodotto.getDescrizione());
             ps.setString(3,prodotto.getMarca());
             ps.setFloat(4,prodotto.getPrezzo());
             ps.setInt(5,idCategoria);
+            ps.setString(6,prodotto.getFotoCopertina());
+            if(ps.executeUpdate() != 1){
+                throw new RuntimeException("INSERT error,");
+            }
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+            int id = rs.getInt(1);
+            ps = con.prepareStatement("INSERT  INTO foto_prodotto(link1, link2, link3, link4, id_prodotto) VALUES(?,?,?,?,?)");
+            ps.setString(1,prodotto.getListaFoto().get(1));
+            ps.setString(1,prodotto.getListaFoto().get(2));
+            ps.setString(1,prodotto.getListaFoto().get(3));
+            ps.setString(1,prodotto.getListaFoto().get(4));
+            ps.setInt(5,id);
             if(ps.executeUpdate() != 1){
                 throw new RuntimeException("INSERT error,");
             }
@@ -154,13 +181,14 @@ public class ProdottoDAO {
 
     public void doUpdate(Prodotto prodotto,int idCategoria){
         try(Connection con = ConPool.getConnection()){
-             PreparedStatement ps=con.prepareStatement("UPDATE prodotto SET nome=?, descrizione=?, marca=?, prezzo=?, categoria=? WHERE id =?");
+             PreparedStatement ps=con.prepareStatement("UPDATE prodotto SET nome=?, descrizione=?, marca=?, prezzo=?, categoria=?, foto_copertina=? WHERE id =?");
              ps.setString(1,prodotto.getNome());
              ps.setString(2,prodotto.getDescrizione());
              ps.setString(3,prodotto.getMarca());
              ps.setFloat(4,prodotto.getPrezzo());
              ps.setInt(5,idCategoria);
-             ps.setInt(6,prodotto.getId());
+             ps.setString(6,prodotto.getFotoCopertina());
+             ps.setInt(7,prodotto.getId());
         if (ps.executeUpdate() != 1){
             throw new RuntimeException("UPDATE error.");
         }
